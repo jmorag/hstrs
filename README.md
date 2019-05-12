@@ -3,26 +3,21 @@
 
 ```
 hstrs 0.0.1
-Joseph Morag <jm4157@columbia.edu>
-A modern alternative for strings, in haskell
 
-USAGE:
-    hstrs [OPTIONS] [FILE]...
+Usage: hstrs ([-n|--number <number>] [-o|--offset <offset>] FILES |
+             (-v|--version))
+  A modern alternative for strings, in haskell
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
-
-OPTIONS:
-    -n, --number <number>    Specify the minimum string length, where the number argument is a positive decimal integer.
-                             [default: 4]
-    -o, --offset <offset>    Write each string preceded by its byte offset from the start of the file. The format shall
-                             be dependent on the single character used as the format option-argument:
-                             
-                             	d	The offset shall be written in decimal. [default]
-                             	o	The offset shall be written in octal.
-                             	x	The offset shall be written in hexadecimal.
-
-ARGS:
-    <FILE>...    Specify the files to process.
+Available options:
+  -n,--number <number>     Specify the minimum string length, where the number
+                           argument is a positive decimal integer. (default: 4)
+  -o,--offset <offset>     Write each string preceded by its byte offset from
+                           the start of the file. The format shall be dependent
+                           on the single character used as the format
+                           option-argument:
+                               d         The offset shall be written in decimal.
+                               o         The offset shall be written in octal.
+                               x         The offset shall be written in hexadecimal.
+  -v,--version             Print the version
+  -h,--help                Show this help text
 ```
