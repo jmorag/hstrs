@@ -3,14 +3,16 @@ module Options
   ( parseOpts
   , version
   , Options(..)
+  , Offset(..)
   )
 where
 
 import           Options.Applicative
 import           Options.Applicative.Help.Pretty
+import           Data.Int
 
 data Offset = Decimal | Octal | Hexadecimal deriving (Show)
-data Options = Args { number :: Int
+data Options = Args { number :: Int64
                     , offset :: Maybe Offset
                     , files :: [FilePath]
                     }
