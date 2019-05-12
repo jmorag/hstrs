@@ -19,9 +19,13 @@ data Options = Args { number :: Int64
              | Version
              deriving (Show)
 
+numberP :: Parser Int64
+numberP = option auto $
+  long "number" <> short 'n' <> value 4 <> showDefault <> metavar "<number>" <>
+  help "Specify the minimum string length, where the number argument is a positive decimal integer."
+
 offsetP :: Parser Offset
-offsetP = option
-  offsetReader
+offsetP = option offsetReader
   (long "offset" <> short 'o' <> metavar "<offset>" <> helpDoc helpText)
  where
   offsetReader = eitherReader $ \case
@@ -30,38 +34,26 @@ offsetP = option
     "x" -> Right Hexadecimal
     _ ->
       Left "Offset must be 'd' (decimal), 'h' (hexadecimal), or 'o' (octal)."
-  helpText =
-    Just
-      $  paragraph
-           "Write each string preceded by its byte offset from the start of the file. The format shall be dependent on the single character used as the format option-argument:"
+
+  helpText = Just $ paragraph
+    "Write each string preceded by its byte offset from the start of the file. The format shall be dependent on the single character used as the format option-argument:"
       <> hardline
-      <> indent
-           4
-           (vsep
-             [ text "d\t The offset shall be written in decimal."
-             , text "o\t The offset shall be written in octal."
-             , text "x\t The offset shall be written in hexadecimal."
-             ]
-           )
+      <> indent 4 (vsep
+         [ text "d\t The offset shall be written in decimal."
+         , text "o\t The offset shall be written in octal."
+         , text "x\t The offset shall be written in hexadecimal."])
+
   paragraph = fillSep . map text . words
 
+filesP :: Parser [FilePath]
+filesP = some (strArgument (metavar "FILES"))
+
+versionP :: Parser ()
+versionP = flag' () (long "version" <> short 'v' <> help "Print the version ")
+
 optionsP :: Parser Options
-optionsP =
-  Args
-    <$> option
-          auto
-          (  long "number"
-          <> short 'n'
-          <> value 4
-          <> showDefault
-          <> help
-               "Specify the minimum string length, where the number argument is a positive decimal integer."
-          <> metavar "<number>"
-          )
-    <*> optional offsetP
-    <*> some (strArgument (metavar "FILES"))
-    <|> Version
-    <$  flag' () (long "version" <> short 'v' <> help "Print the version ")
+optionsP = Args <$> numberP <*> optional offsetP <*> filesP
+       <|> Version <$ versionP
 
 version :: String
 version = "0.0.1"
